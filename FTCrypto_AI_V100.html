@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FTCrypto AI V100 Ultimate</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+body{background:#060b18;color:#fff}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:#0f172a;padding:20px;overflow:auto}
+.logo{font-size:30px;font-weight:900;color:#38bdf8;margin-bottom:20px}
+.sidebar a{display:block;color:#cbd5e1;text-decoration:none;padding:12px;border-radius:10px}
+.sidebar a:hover{background:#1e293b}
+.main{margin-left:260px;padding:20px}
+.hero{padding:30px;border-radius:24px;background:linear-gradient(135deg,#0ea5e9,#7c3aed)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin:20px 0}
+.card{background:#111827;border-radius:20px;padding:18px;box-shadow:0 0 25px rgba(0,0,0,.25)}
+input{width:100%;padding:14px;border:none;border-radius:14px;margin:10px 0}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px;border-bottom:1px solid #243244}
+.badge{display:inline-block;padding:6px 12px;background:#1e293b;border-radius:999px}
+iframe{width:100%;height:500px;border:none;border-radius:20px}
+@media(max-width:900px){.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="sidebar">
+<div class="logo">FTCrypto AI V100</div>
+<a href="#">Dashboard</a>
+<a href="#">Markets</a>
+<a href="#">TradingView</a>
+<a href="#">AI Analyst</a>
+<a href="#">Signals</a>
+<a href="#">Derivatives</a>
+<a href="#">Whale Alert</a>
+<a href="#">Portfolio</a>
+<a href="#">News</a>
+</div>
+
+<div class="main">
+<div class="hero">
+<h1>FTCrypto AI V100 Ultimate Startup Prototype</h1>
+<p>Premium crypto intelligence dashboard prototype.</p>
+</div>
+
+<div class="grid">
+<div class="card"><h3>BTC</h3><div id="btc">...</div></div>
+<div class="card"><h3>ETH</h3><div id="eth">...</div></div>
+<div class="card"><h3>Coins</h3><div id="coins">0</div></div>
+<div class="card"><h3>AI Signal</h3><div id="signal">...</div></div>
+</div>
+
+<div class="card">
+<h2>Trading Chart</h2>
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BTCUSDT&interval=60"></iframe>
+</div>
+
+<div class="grid">
+<div class="card">
+<h3>Fear & Greed</h3>
+<div class="badge">72 - Greed</div>
+</div>
+<div class="card">
+<h3>Funding Rate</h3>
+<p>Demo: +0.012%</p>
+</div>
+<div class="card">
+<h3>Open Interest</h3>
+<p>Demo Live Panel</p>
+</div>
+<div class="card">
+<h3>Whale Alert</h3>
+<p>Demo Tracking</p>
+</div>
+</div>
+
+<div class="card">
+<h2>AI Market Analyst</h2>
+<p id="analysis">Scanning market...</p>
+</div>
+
+<input id="search" placeholder="Cari crypto...">
+
+<div class="card">
+<h2>Top 100 Crypto Market</h2>
+<table>
+<thead><tr><th>Coin</th><th>Price</th><th>24H</th><th>Rank</th></tr></thead>
+<tbody id="market"></tbody>
+</table>
+</div>
+
+<div class="grid">
+<div class="card"><h3>Portfolio Simulator</h3><p>Balance: $10,000 Demo</p></div>
+<div class="card"><h3>P&L Simulator</h3><p>+$432 Demo</p></div>
+<div class="card"><h3>Watchlist</h3><p>BTC, ETH, SOL</p></div>
+<div class="card"><h3>News Feed</h3><p>Crypto market updates.</p></div>
+</div>
+
+</div>
+
+<script>
+let all=[];
+async function load(){
+const r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1');
+const d=await r.json();
+all=d;
+coins.innerText=d.length;
+btc.innerText='$'+(d.find(x=>x.symbol==='btc')?.current_price||'-');
+eth.innerText='$'+(d.find(x=>x.symbol==='eth')?.current_price||'-');
+signal.innerHTML=['BUY','SELL','HOLD'][Math.floor(Math.random()*3)];
+analysis.innerText='AI mendeteksi momentum pasar campuran. Pantau BTC dan ETH untuk breakout potensial.';
+render(d);
+}
+function render(list){
+market.innerHTML=list.map(c=>`<tr><td>${c.name}</td><td>$${c.current_price}</td><td>${(c.price_change_percentage_24h||0).toFixed(2)}%</td><td>#${c.market_cap_rank}</td></tr>`).join('');
+}
+search.oninput=e=>{
+const q=e.target.value.toLowerCase();
+render(all.filter(c=>c.name.toLowerCase().includes(q)||c.symbol.toLowerCase().includes(q)));
+};
+load();
+</script>
+</body>
+</html>
